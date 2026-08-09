@@ -1,0 +1,68 @@
+generated: '2026-08-09'
+method: probed
+source: https://status.callminer.net/
+notes: >-
+  CallMiner publishes a regional service status page that tracks the Developer
+  API as a first-class component. No public versioning policy, deprecation
+  policy, Sunset/Deprecation header commitment, SLA document or changelog was
+  found on any anonymously reachable CallMiner surface; release notes appear to
+  live inside the customer community (community.callminer.com), which requires a
+  login.
+status_page: https://status.callminer.net/
+status_page_detail:
+  provider: Status.io
+  components:
+  - Analyze
+  - Coach
+  - Realtime
+  - OmniAgent
+  - Outreach
+  - Developer API
+  regions:
+  - US
+  - UK
+  - Canada
+  - EU
+  features:
+  - status history
+  - incident reporting
+  - email subscription
+  - Microsoft Teams webhook subscription
+  observed_state: All Systems Operational
+versioning:
+  scheme: uri-path
+  evidence: >-
+    Bulk Export API paths are rooted at /bulkexport/api on the regional API host;
+    no version segment or version header is publicly documented.
+  docs: null
+  confidence: low
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  note: no public deprecation or sunset policy found
+sla:
+  url: null
+  uptime_target: null
+  note: no public SLA document; SLA terms are presumed contractual
+changelog:
+  url: null
+  note: >-
+    No public dated changelog. The CallMiner customer community at
+    community.callminer.com returns 200 but redirects to /private/login.
+regional_isolation:
+  note: >-
+    CallMiner operates region-isolated API and identity hosts (US, US-FISMA, UK,
+    AU, CA, EU); the status page reports US, UK, Canada and EU separately.
+deprecated_operations: []
+x-evidence:
+  fetched: '2026-08-09'
+  evidence:
+  - url: https://status.callminer.net/
+    http_status: 200
+    content_type: text/html
+  - url: https://community.callminer.com/
+    http_status: 200
+    note: resolves to https://community.callminer.com/private/login
+  - url: https://developer.callminer.com/
+    http_status: null
+    note: NXDOMAIN (verified against 8.8.8.8 and 1.1.1.1)

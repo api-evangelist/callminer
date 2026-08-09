@@ -1,23 +1,129 @@
 aid: callminer
 name: CallMiner
-description: 'CallMiner is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'CallMiner is a Waltham, Massachusetts conversation intelligence and contact-center
+  analytics company whose Eureka platform captures and analyzes omnichannel customer
+  interactions — recorded and real-time audio, screen recordings, chat, email, surveys
+  and video — to surface customer experience, quality management, risk and compliance,
+  fraud and sales-effectiveness insight. The product family spans Capture (Record,
+  Screen Record, Redact), Intelligence (Analyze, Visualize), Augmentation (Coach, RealTime)
+  and Automation (Outreach, OmniAgent, LiveTranslate). CallMiner exposes an OAuth 2.0
+  protected developer API — a media/metadata Ingestion API and a Bulk Export API — hosted
+  on regional api*.callminer.net endpoints and secured by its own IdentityServer-based
+  identity provider at idp*.callminer.net. The API reference is published as Swagger
+  UI on the API host itself but sits behind an interactive login, so no machine-readable
+  contract is publicly retrievable.'
 url: https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/apis.yml
+image: https://images.ctfassets.net/xj0skx6m69u2/cFRNy2dkU6bRc2iRmk7tF/6f1fc904dea9217c746c0b5cfd9eaa32/Logo_CallMiner_Color.svg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-09'
 modified: '2026-08-09'
 tags:
 - Company
-apis: []
+- Conversation Intelligence
+- Speech Analytics
+- Contact Center
+- Customer Experience
+- Artificial Intelligence
+- Analytics
+- Transcription
+- Quality Management
+- Compliance
+apis:
+- name: CallMiner Eureka Ingestion API
+  description: 'Asynchronously add or update media and metadata for audio and text-based
+    contacts in a CallMiner Eureka tenant. Hosted on the regional CallMiner API host
+    and protected by OAuth 2.0 client credentials issued against the CallMiner identity
+    provider; the Swagger UI on the API host requires an interactive CallMiner login,
+    so the OpenAPI document is not publicly retrievable.'
+  humanURL: https://api.callminer.net/swagger
+  baseURL: https://api.callminer.net
+  tags:
+  - Ingestion
+  - Media
+  - Metadata
+  x-access: gated
+  x-evidence:
+    fetched: '2026-08-09'
+    swagger_ui: https://api.callminer.net/swagger
+    http_status: 302
+    redirects_to: https://idp.callminer.net/connect/authorize
+    oauth_scope: https://callminer.net/auth/platform-ingestion
+  properties:
+  - type: Authentication
+    url: authentication/callminer-authentication.yml
+  - type: OAuthScopes
+    url: scopes/callminer-scopes.yml
+- name: CallMiner Eureka Bulk Export API
+  description: 'Create and poll bulk export jobs that extract contact, transcript,
+    score and metadata datasets out of a CallMiner Eureka tenant as downloadable archives.
+    Protected by OAuth 2.0 client credentials against the CallMiner identity provider;
+    the Swagger UI is served from the API host but redirects to an interactive login.'
+  humanURL: https://api.callminer.net/bulkexport/swagger
+  baseURL: https://api.callminer.net/bulkexport/api
+  tags:
+  - Bulk Export
+  - Reporting
+  - Data Export
+  x-access: gated
+  x-evidence:
+    fetched: '2026-08-09'
+    swagger_ui: https://api.callminer.net/bulkexport/swagger
+    http_status: 302
+    redirects_to: https://idp.callminer.net/connect/authorize
+    oauth_scope: https://callminer.net/auth/platform-bulkexport
+  properties:
+  - type: Authentication
+    url: authentication/callminer-authentication.yml
+  - type: OAuthScopes
+    url: scopes/callminer-scopes.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: TrustCenter
+  url: security/callminer-trust-center.yml
+- type: DomainSecurity
+  url: security/callminer-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/callminer_stock/
+  url: https://callminer.com/
+- type: Blog
+  url: https://callminer.com/blog
+- type: BlogRSS
+  url: https://callminer.com/blog/feed
+- type: Support
+  url: https://callminer.com/contact
+- type: Community
+  url: https://community.callminer.com/
+- type: FAQ
+  url: https://callminer.com/faq
+- type: TermsOfService
+  url: https://callminer.com/terms-use
+- type: PrivacyPolicy
+  url: https://callminer.com/privacy-policy
+- type: StatusPage
+  url: https://status.callminer.net/
+- type: Compliance
+  url: https://callminer.com/our-company-security
+- type: Integrations
+  url: https://callminer.com/products/integrations/integration-listings
+- type: Authentication
+  url: authentication/callminer-authentication.yml
+- type: OAuthScopes
+  url: scopes/callminer-scopes.yml
+- type: WellKnown
+  url: well-known/callminer-well-known.yml
+- type: Conformance
+  url: conformance/callminer-conformance.yml
+- type: Lifecycle
+  url: lifecycle/callminer-lifecycle.yml
+- type: LLMsTxt
+  url: llms/callminer-llms.txt
+x-enrichment:
+  date: '2026-08-09'
+  status: enriched
+  artifacts_added: 9
+  pass: local-v1

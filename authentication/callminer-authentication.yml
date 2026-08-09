@@ -1,0 +1,121 @@
+generated: '2026-08-09'
+method: probed
+source: https://idp.callminer.net/.well-known/openid-configuration
+docs: https://api.callminer.net/swagger
+notes: >-
+  Derived from the CallMiner identity provider's live OpenID Connect discovery
+  document plus the OAuth 2.0 authorization requests the CallMiner Swagger UIs
+  emit when an anonymous client requests them. No OpenAPI document is publicly
+  retrievable, so the security schemes below are observed from the running
+  authorization surface rather than parsed from a spec.
+summary:
+  types:
+  - oauth2
+  - openIdConnect
+  oauth2_flows:
+  - clientCredentials
+  - authorizationCode
+  api_key_in: []
+  identity_provider: https://idp.callminer.net
+  regional: true
+schemes:
+- name: CallMinerOAuth2ClientCredentials
+  type: oauth2
+  flow: clientCredentials
+  token_url: https://idp.callminer.net/connect/token
+  token_endpoint_auth_methods:
+  - client_secret_basic
+  - client_secret_post
+  description: >-
+    Machine-to-machine flow used by server-side integrations against the
+    Ingestion and Bulk Export APIs. The client_id and client_secret are issued
+    by CallMiner support, not self-service.
+  sources:
+  - https://idp.callminer.net/.well-known/openid-configuration
+- name: CallMinerOAuth2AuthorizationCode
+  type: oauth2
+  flow: authorizationCode
+  authorization_url: https://idp.callminer.net/connect/authorize
+  token_url: https://idp.callminer.net/connect/token
+  pkce:
+    supported: true
+    code_challenge_methods:
+    - S256
+    - plain
+  description: >-
+    Interactive flow used by CallMiner's own first-party surfaces, including the
+    Swagger UI hosted on the API host. Observed on an anonymous GET of
+    /swagger and /bulkexport/swagger, both of which 302 to /connect/authorize.
+  sources:
+  - https://api.callminer.net/swagger
+  - https://api.callminer.net/bulkexport/swagger
+- name: CallMinerOpenIDConnect
+  type: openIdConnect
+  openid_connect_url: https://idp.callminer.net/.well-known/openid-configuration
+  issuer: https://idp.callminer.net
+  jwks_uri: https://idp.callminer.net/.well-known/openid-configuration/jwks
+  id_token_signing_alg_values_supported:
+  - RS256
+  subject_types_supported:
+  - public
+  sources:
+  - https://idp.callminer.net/.well-known/openid-configuration
+endpoints:
+  authorization: https://idp.callminer.net/connect/authorize
+  token: https://idp.callminer.net/connect/token
+  userinfo: https://idp.callminer.net/connect/userinfo
+  introspection: https://idp.callminer.net/connect/introspect
+  revocation: https://idp.callminer.net/connect/revocation
+  device_authorization: https://idp.callminer.net/connect/deviceauthorization
+  end_session: https://idp.callminer.net/connect/endsession
+  jwks: https://idp.callminer.net/.well-known/openid-configuration/jwks
+grant_types_supported:
+- authorization_code
+- client_credentials
+- refresh_token
+- implicit
+- password
+- urn:ietf:params:oauth:grant-type:device_code
+regions:
+  note: >-
+    CallMiner runs region-isolated API and identity hosts. Each region has its
+    own issuer; the discovery document above is the US issuer.
+  hosts:
+  - region: US
+    api: https://api.callminer.net
+    idp: https://idp.callminer.net
+  - region: US-FISMA
+    api: https://apif.callminer.net
+    idp: https://idpf.callminer.net
+  - region: UK
+    api: https://apiuk.callminer.net
+    idp: https://idpuk.callminer.net
+  - region: AU
+    api: https://apiaus.callminer.net
+    idp: https://idpaus.callminer.net
+  - region: CA
+    api: https://apica.callminer.net
+    idp: https://idpca.callminer.net
+  - region: EU
+    api: https://apiew.callminer.net
+    idp: https://idpew.callminer.net
+  region_source: https://github.com/Matatika/tap-callminer
+credential_issuance:
+  self_serve: false
+  note: >-
+    Client credentials are issued by CallMiner rather than obtained through a
+    public developer signup. No public developer portal resolves —
+    developer.callminer.com and partner.callminer.com are NXDOMAIN as of the
+    probe date.
+x-evidence:
+  fetched: '2026-08-09'
+  evidence:
+  - url: https://idp.callminer.net/.well-known/openid-configuration
+    http_status: 200
+    content_type: application/json
+  - url: https://api.callminer.net/swagger
+    http_status: 302
+    note: redirects to https://idp.callminer.net/connect/authorize then /login
+  - url: https://api.callminer.net/bulkexport/swagger
+    http_status: 302
+    note: redirects to https://idp.callminer.net/connect/authorize then /login

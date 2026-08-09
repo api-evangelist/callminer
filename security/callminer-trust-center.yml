@@ -1,0 +1,55 @@
+generated: '2026-08-09'
+method: searched
+probe: true
+source: https://callminer.com/our-company-security
+url: https://callminer.com/our-company-security
+canonical_alias: https://callminer.com/security
+notes: >-
+  CallMiner does not run a dedicated trust portal (trust.callminer.com and
+  trust.callminer.net are NXDOMAIN). It publishes a single Data Security page on
+  the marketing site that names its certifications and its third-party auditor.
+  /security 302s to /our-company-security.
+certifications:
+- SOC 2 Type II
+- ISO/IEC 27001:2022
+- HITRUST CSF
+- FISMA
+- PCI DSS
+- HIPAA
+frameworks:
+- NIST SP 800-53
+- FIPS 200
+- AICPA Trust Services Principles
+- HIPAA (via HITRUST CSF)
+auditor: KirkpatrickPrice
+scope_note: >-
+  Certifications are asserted for CallMiner's cloud environment. HITRUST CSF
+  certified status is stated for CallMiner's HITRUST boundary.
+privacy_contacts:
+- privacy@callminer.com
+- data.privacy@callminer.com
+privacy_policy: https://callminer.com/privacy-policy
+terms_of_service: https://callminer.com/terms-use
+vulnerability_disclosure:
+  published: false
+  note: >-
+    No security.txt, no responsible-disclosure page, no bug bounty program and no
+    security@ contact found on any anonymously reachable CallMiner surface.
+evidence:
+- source: https://callminer.com/our-company-security
+  http_status: 200
+  keywords:
+  - soc 2 type ii
+  - iso 27001
+  - hitrust csf
+  - fisma
+  - pci dss
+  - hipaa
+  - kirkpatrickprice
+- source: https://callminer.com/security
+  http_status: 302
+  note: redirects to /our-company-security
+- source: https://callminer.com/.well-known/security.txt
+  http_status: 404
+x-evidence:
+  fetched: '2026-08-09'

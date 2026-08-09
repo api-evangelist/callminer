@@ -42,5 +42,21 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-CallMiner is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/callminer_stock/
+CallMiner is a conversation intelligence and contact-center analytics company. Its Eureka platform
+captures and analyzes omnichannel customer interactions — recorded and real-time audio, screen
+recordings, chat, email, surveys and video — across Capture (Record, Screen Record, Redact),
+Intelligence (Analyze, Visualize), Augmentation (Coach, RealTime) and Automation (Outreach,
+OmniAgent, LiveTranslate).
+
+CallMiner ships a real developer API — an Ingestion API and a Bulk Export API on region-isolated
+`api*.callminer.net` hosts, protected by OAuth 2.0 against its own identity provider at
+`idp*.callminer.net`, and tracked as a "Developer API" component on its public status page. The
+API reference is served as Swagger UI from the API host, but both `/swagger` and
+`/bulkexport/swagger` redirect to an interactive CallMiner login, so no OpenAPI document is
+publicly retrievable. The `developer.callminer.com` and `partner.callminer.com` hosts cited by
+third-party directories do not resolve (NXDOMAIN, verified 2026-08-09).
+
+- Website: https://callminer.com/
+- Status: https://status.callminer.net/
+- Security and compliance: https://callminer.com/our-company-security
+- OpenID Connect discovery: https://idp.callminer.net/.well-known/openid-configuration

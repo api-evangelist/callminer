@@ -1,0 +1,73 @@
+generated: '2026-08-09'
+method: probed
+source: https://idp.callminer.net/.well-known/openid-configuration
+notes: >-
+  Probed every reachable CallMiner host. Only the identity provider
+  (idp.callminer.net) publishes a well-known discovery document; the marketing
+  host (callminer.com) and the API host (api.callminer.net) return 404 for every
+  /.well-known/ path, including security.txt, api-catalog and both A2A agent-card
+  paths. Note that api.callminer.net serves `User-agent: * / Disallow: /`.
+hosts:
+- host: https://idp.callminer.net
+  role: identity-provider
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: callminer-openid-configuration.json
+  - path: /.well-known/openid-configuration/jwks
+    status: 200
+    content_type: application/jwk-set+json
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://api.callminer.net
+  role: api
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /robots.txt
+    status: 200
+    note: 'User-agent: * / Disallow: /'
+- host: https://callminer.com
+  role: website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+x-evidence:
+  fetched: '2026-08-09'
+  probes: 25
+  hits: 2

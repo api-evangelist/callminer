@@ -1,0 +1,79 @@
+generated: '2026-08-09'
+method: probed
+source: https://api.callminer.net/swagger
+notes: >-
+  CallMiner publishes no public scope reference. The scopes below were observed
+  on the wire: the OpenID Connect discovery document advertises only
+  offline_access under scopes_supported, while CallMiner's own first-party
+  Swagger UIs request resource scopes in their /connect/authorize redirects.
+  Those resource scopes are recorded verbatim from the observed Location header.
+  This is not a complete scope catalog — a full list would require the gated
+  documentation or authenticated introspection.
+docs: null
+schemes:
+- name: CallMinerOAuth2
+  authorization_url: https://idp.callminer.net/connect/authorize
+  token_url: https://idp.callminer.net/connect/token
+  flows:
+  - authorizationCode
+  - clientCredentials
+scopes:
+- scope: openid
+  description: OpenID Connect authentication; returns an id_token.
+  kind: standard
+  flows:
+  - authorizationCode
+  sources:
+  - https://api.callminer.net/swagger
+- scope: profile
+  description: Standard OpenID Connect profile claims for the signed-in user.
+  kind: standard
+  flows:
+  - authorizationCode
+  sources:
+  - https://api.callminer.net/swagger
+- scope: offline_access
+  description: Issue a refresh token so the client can obtain new access tokens without user interaction.
+  kind: standard
+  flows:
+  - authorizationCode
+  sources:
+  - https://idp.callminer.net/.well-known/openid-configuration
+  - https://api.callminer.net/swagger
+- scope: https://callminer.net/auth/platform-ingestion
+  description: >-
+    Access to the CallMiner Eureka Ingestion API surface — adding and updating
+    media and metadata for contacts. Observed as the resource scope requested by
+    the Swagger UI served at https://api.callminer.net/swagger.
+  kind: resource
+  api: CallMiner Eureka Ingestion API
+  flows:
+  - authorizationCode
+  sources:
+  - https://api.callminer.net/swagger
+- scope: https://callminer.net/auth/platform-bulkexport
+  description: >-
+    Access to the CallMiner Eureka Bulk Export API surface — creating and
+    retrieving bulk export jobs. Observed as the resource scope requested by the
+    Swagger UI served at https://api.callminer.net/bulkexport/swagger.
+  kind: resource
+  api: CallMiner Eureka Bulk Export API
+  flows:
+  - authorizationCode
+  sources:
+  - https://api.callminer.net/bulkexport/swagger
+completeness:
+  complete: false
+  reason: >-
+    scopes_supported in the discovery document lists only offline_access, so the
+    resource scopes are not enumerable anonymously. Only the two resource scopes
+    CallMiner's own UIs request could be observed.
+x-evidence:
+  fetched: '2026-08-09'
+  evidence:
+  - url: https://idp.callminer.net/.well-known/openid-configuration
+    http_status: 200
+  - url: https://api.callminer.net/swagger
+    http_status: 302
+  - url: https://api.callminer.net/bulkexport/swagger
+    http_status: 302

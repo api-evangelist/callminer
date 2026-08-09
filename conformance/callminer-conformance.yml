@@ -1,0 +1,91 @@
+generated: '2026-08-09'
+method: probed
+source: https://idp.callminer.net/.well-known/openid-configuration
+notes: >-
+  Cross-cutting standards CallMiner's public surface can be shown to conform to.
+  No OpenAPI is publicly retrievable, so spec-derived assertions (RFC 9457
+  problem details, pagination, idempotency, JSON:API) cannot be evaluated and
+  are recorded as unknown rather than false.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    Live OAuth 2.0 authorization server at https://idp.callminer.net with
+    /connect/authorize, /connect/token, /connect/introspect and
+    /connect/revocation endpoints.
+- id: oidc-discovery
+  conforms: true
+  evidence: >-
+    https://idp.callminer.net/.well-known/openid-configuration returns 200
+    application/json with issuer, jwks_uri, authorization_endpoint,
+    token_endpoint and userinfo_endpoint.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: >-
+    /.well-known/oauth-authorization-server returns 404; only the OIDC discovery
+    path is served.
+- id: rfc7636-pkce
+  conforms: true
+  evidence: 'code_challenge_methods_supported: [plain, S256]'
+- id: rfc7662-token-introspection
+  conforms: true
+  evidence: introspection_endpoint https://idp.callminer.net/connect/introspect
+- id: rfc7009-token-revocation
+  conforms: true
+  evidence: revocation_endpoint https://idp.callminer.net/connect/revocation
+- id: rfc8628-device-authorization-grant
+  conforms: true
+  evidence: >-
+    device_authorization_endpoint present and
+    urn:ietf:params:oauth:grant-type:device_code in grant_types_supported.
+- id: oidc-frontchannel-logout
+  conforms: true
+  evidence: 'frontchannel_logout_supported: true'
+- id: oidc-backchannel-logout
+  conforms: true
+  evidence: 'backchannel_logout_supported: true'
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on callminer.com, api.callminer.net
+    and idp.callminer.net.
+- id: openapi
+  conforms: false
+  evidence: >-
+    Swagger UI is served at https://api.callminer.net/swagger and
+    /bulkexport/swagger but both 302 to an interactive login; no OpenAPI or
+    swagger.json is retrievable anonymously.
+- id: rfc9457-problem-details
+  conforms: unknown
+  evidence: no public specification or error reference to evaluate
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json return 404 on every
+    CallMiner host probed.
+compliance:
+  published: true
+  url: https://callminer.com/our-company-security
+  certifications:
+  - SOC 2 Type II
+  - ISO/IEC 27001:2022
+  - HITRUST CSF
+  - FISMA (NIST SP 800-53 baseline)
+  - PCI DSS
+  auditor: KirkpatrickPrice
+  evidence: >-
+    "CallMiner undergoes a rigorous testing schedule to verify SOC 2 Type II,
+    FISMA, HITRUST, ISO 271001:2022 certification and PCI DSS controls and
+    compliance through an independent third-party audit conducted by
+    KirkpatrickPrice." — https://callminer.com/our-company-security
+x-evidence:
+  fetched: '2026-08-09'
+  evidence:
+  - url: https://idp.callminer.net/.well-known/openid-configuration
+    http_status: 200
+  - url: https://idp.callminer.net/.well-known/oauth-authorization-server
+    http_status: 404
+  - url: https://callminer.com/our-company-security
+    http_status: 200
+  - url: https://api.callminer.net/swagger
+    http_status: 302
