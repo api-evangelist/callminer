@@ -1,0 +1,21 @@
+{
+  "repo": "callminer",
+  "feeds": [
+    {
+      "source": "https://callminer.com/",
+      "feed_url": "https://callminer.com/feed/",
+      "title": "",
+      "saved": 1,
+      "method": "discovered"
+    },
+    {
+      "source": "https://callminer.com/blog",
+      "feed_url": "https://callminer.com/blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 1,
+  "fetched": "2026-08-15T12:22:01Z"
+}
