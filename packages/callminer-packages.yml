@@ -1,0 +1,88 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  npm registry search, PyPI, NuGet, RubyGems, crates.io, pkg.go.dev, GitHub code
+  search, and the CallMiner marketing site
+notes: >-
+  CallMiner publishes NO first-party client library on any public package
+  registry. npm, PyPI, NuGet, RubyGems, crates.io and Maven Central were all
+  searched for "callminer" and returned nothing owned by CallMiner. There is no
+  CallMiner GitHub organization — github.com/callminer does not exist, and every
+  repository matching "callminer" in GitHub search is owned by a third party
+  (integrators, ETL vendors, or individual customers). Consistent with the
+  access model: client credentials are issued by CallMiner support rather than
+  self-service, so integration code is written per tenant rather than
+  distributed as a shipped SDK. The two entries below are recorded as
+  third-party ecosystem evidence, NOT as CallMiner SDKs — both are
+  official:false.
+first_party:
+  count: 0
+  note: >-
+    No CallMiner-owned package found on any registry probed on 2026-08-14. This
+    is an honest zero, not an unchecked field.
+packages: []
+third_party:
+- language: javascript
+  registry: npm
+  name: '@pipedream/callminer'
+  url: https://www.npmjs.com/package/@pipedream/callminer
+  install: npm install @pipedream/callminer
+  official: false
+  owner: Pipedream
+  version: 0.0.1
+  published: '2025-01-16'
+  registry_metadata: https://registry.npmjs.org/@pipedream%2Fcallminer
+  note: >-
+    Pipedream's connector scaffold for CallMiner. Still at the initial 0.0.1
+    release published 2025-01-16; the package metadata was last touched
+    2026-06-25 without a version bump. Not a CallMiner SDK.
+- language: python
+  registry: null
+  name: tap-callminer
+  url: https://github.com/Matatika/tap-callminer
+  install: pipx install git+https://github.com/Matatika/tap-callminer.git@main
+  official: false
+  owner: Matatika (Reuben Frankel)
+  version: 0.0.1
+  published: null
+  note: >-
+    Singer/Meltano tap for the CallMiner Eureka Bulk Export API. Declares
+    version 0.0.1 in pyproject.toml and is NOT published to PyPI
+    (pypi.org/pypi/tap-callminer/json returns 404), so there is no registry
+    release date to record — version is read from the repository manifest and
+    `published` is honestly null. The repository is actively maintained (last
+    push observed 2026-08-12) and is currently the most complete public
+    description of the Bulk Export API surface; it is the source of the
+    conventions/ and data-model/ artifacts in this repo.
+registries_probed:
+- registry: npm
+  query: callminer
+  result: only @pipedream/callminer (third-party)
+- registry: pypi
+  query: callminer, callminer-api, tap-callminer
+  result: 404 on all
+- registry: nuget
+  query: callminer
+  result: 0 hits
+- registry: rubygems
+  query: callminer
+  result: no first-party gem
+- registry: crates.io
+  query: callminer
+  result: no first-party crate
+- registry: maven-central
+  query: callminer
+  result: no first-party artifact
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+  - url: https://registry.npmjs.org/-/v1/search?text=callminer
+    http_status: 200
+    note: single hit, @pipedream/callminer, third-party
+  - url: https://pypi.org/pypi/callminer/json
+    http_status: 404
+  - url: https://pypi.org/pypi/tap-callminer/json
+    http_status: 404
+  - url: https://azuresearch-usnc.nuget.org/query?q=callminer
+    http_status: 200
+    note: totalHits 0

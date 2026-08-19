@@ -1,0 +1,172 @@
+generated: '2026-08-14'
+method: derived
+source: >-
+  https://github.com/Matatika/tap-callminer (third-party open-source Singer tap
+  for the CallMiner Eureka Bulk Export API)
+provenance_warning: >-
+  CallMiner publishes no OpenAPI, no object reference and no schema catalog —
+  the Swagger UIs 302 to an interactive login. This entity graph is NOT derived
+  from a CallMiner specification. It is derived from the declared export data
+  types and primary keys in Matatika's maintained open-source client, which
+  calls the real Bulk Export API. Entity names and key fields are read verbatim
+  from that source; the relationships between them are inferred from the key
+  composition (every non-Contact entity is keyed by ContactID, which makes
+  Contact the aggregate root). Field-level schemas are NOT reproduced here
+  because the client fetches them at runtime from the tenant's own
+  /info/callmetadataconfig — the Contact shape is tenant-configurable, so no
+  fixed field list exists to publish. Treat this as a discovery-grade map of
+  the export surface, not as a CallMiner-published data model.
+scope: CallMiner Eureka Bulk Export API
+root_entity: Contact
+tenant_configurable_schema:
+  entity: Contact
+  endpoint: /info/callmetadataconfig
+  note: >-
+    The Contacts data type has no fixed column set. A tenant's contact metadata
+    configuration is returned as a list of {ColumnName, FriendlyName,
+    Description, DotNetType} records and defines the exported columns. Types are
+    .NET type names (System.String, System.Byte, System.Int16, System.Int32,
+    System.Single, System.Double, System.Decimal, System.DateTime,
+    System.TimeSpan, System.Guid, System.Boolean).
+entities:
+- name: Contact
+  export_data_type: Contacts
+  primary_key: [ID]
+  description: >-
+    A single customer interaction — a recorded or real-time call, chat, email,
+    survey or video — and its metadata. The aggregate root of the export model.
+  schema_source: /info/callmetadataconfig (tenant-specific)
+- name: AISummary
+  export_data_type: Ai_summaries
+  primary_key: [ContactID]
+  description: AI-generated summary of a contact.
+- name: Alert
+  export_data_type: Alerts
+  primary_key: [ContactID, TimeStamp]
+  description: >-
+    Real-time alert raised against a contact at a point in time (the Eureka
+    Alert / RealTime surface).
+- name: Category
+  export_data_type: Categories
+  primary_key: [ContactID, CategoryID]
+  description: A linguistic/behavioural category matched on a contact.
+- name: CategoryComponent
+  export_data_type: Category_components
+  primary_key: [ContactID, ComponentID, CategoryID]
+  description: The individual component of a category that fired on a contact.
+- name: ClientID
+  export_data_type: Client_Ids
+  primary_key: [ContactID, ClientID]
+  description: Customer-supplied identifiers associated with a contact.
+- name: CoachInsight
+  export_data_type: Coach_insights
+  primary_key: [ContactID, InsightID]
+  description: Coaching insight generated for a contact (CallMiner Coach).
+- name: CoachWorkflow
+  export_data_type: Coach_workflow
+  export_filename_type: Coach_Workflows
+  primary_key: [ContactID, ID, Timestamp]
+  description: Coaching workflow event recorded against a contact.
+- name: Comment
+  export_data_type: Comments
+  primary_key: [ContactID, CommentID]
+  description: Human comment attached to a contact.
+- name: EmailMetadata
+  export_data_type: Email_metadata
+  primary_key: [ContactID, StartTime]
+  description: Metadata for an email-channel contact.
+- name: Event
+  export_data_type: Events
+  primary_key: [ContactID, StartTime, EndTime]
+  description: >-
+    A time-bounded acoustic or processing event within a contact. Exported as
+    one family with per-variant archive members.
+  variants:
+  - {name: EventDelay, file_type: Events_Delay}
+  - {name: EventMissingRealTimeSegments, file_type: Events_MissingRealTimeSegements}
+  - {name: EventOvertalk, file_type: Events_Overtalk}
+  - {name: EventRedaction, file_type: Events_Redaction}
+  - {name: EventSilence, file_type: Events_Silence}
+- name: Score
+  export_data_type: Scores
+  primary_key: [ContactID, ScoreID]
+  description: A score applied to a contact (quality management / scorecards).
+- name: ScoreIndicator
+  export_data_type: Score_indicators
+  primary_key: [ContactID, ScoreID, ScoreComponentID]
+  description: The individual component that contributed to a score.
+- name: Tag
+  export_data_type: Tags
+  primary_key: [ContactID, TagID]
+  description: A tag applied to a contact.
+- name: TranscriptBySpeaker
+  export_data_type: Transcripts_by_speaker
+  primary_key: [ContactID, StartTime, SpeakerID]
+  description: >-
+    Speaker-diarized transcript segments for a contact — the output of the
+    speech-to-text layer (see the Open Voice Transcription Standard).
+- name: ExportJob
+  export_data_type: null
+  primary_key: [Id]
+  description: >-
+    A bulk export request. Carries name, DataTypes[], Duration
+    (TimeFrame/StartDate/SearchMode) and EmailRecipients[].
+  api_resource: /export/job
+- name: ExportJobExecution
+  export_data_type: null
+  primary_key: [Id]
+  fields: [Id, Status, CreateDate, FileSize, DownloadEndpoint]
+  description: One run of an export job, and the archive it produced.
+  api_resource: /export/history
+relationships:
+- {from: ExportJob, to: ExportJobExecution, kind: has_many, via: id (query parameter on /export/history)}
+- {from: AISummary, to: Contact, kind: belongs_to, via: ContactID}
+- {from: Alert, to: Contact, kind: belongs_to, via: ContactID}
+- {from: Category, to: Contact, kind: belongs_to, via: ContactID}
+- {from: CategoryComponent, to: Contact, kind: belongs_to, via: ContactID}
+- {from: CategoryComponent, to: Category, kind: belongs_to, via: CategoryID}
+- {from: ClientID, to: Contact, kind: belongs_to, via: ContactID}
+- {from: CoachInsight, to: Contact, kind: belongs_to, via: ContactID}
+- {from: CoachWorkflow, to: Contact, kind: belongs_to, via: ContactID}
+- {from: Comment, to: Contact, kind: belongs_to, via: ContactID}
+- {from: EmailMetadata, to: Contact, kind: belongs_to, via: ContactID}
+- {from: Event, to: Contact, kind: belongs_to, via: ContactID}
+- {from: Score, to: Contact, kind: belongs_to, via: ContactID}
+- {from: ScoreIndicator, to: Contact, kind: belongs_to, via: ContactID}
+- {from: ScoreIndicator, to: Score, kind: belongs_to, via: ScoreID}
+- {from: Tag, to: Contact, kind: belongs_to, via: ContactID}
+- {from: TranscriptBySpeaker, to: Contact, kind: belongs_to, via: ContactID}
+- {from: Contact, to: TranscriptBySpeaker, kind: has_many, via: ContactID}
+- {from: Contact, to: Category, kind: has_many, via: ContactID}
+- {from: Contact, to: Score, kind: has_many, via: ContactID}
+- {from: Contact, to: Event, kind: has_many, via: ContactID}
+- {from: Contact, to: Alert, kind: has_many, via: ContactID}
+- {from: Contact, to: Tag, kind: has_many, via: ContactID}
+counts:
+  entities: 18
+  export_data_types: 16
+  relationships: 23
+not_covered:
+  - >-
+    The Eureka Ingestion API (media and metadata write path) is not represented.
+    No public client or documentation describes its request bodies, so no
+    entities are asserted for it.
+  - >-
+    Field-level schemas for every entity other than Contact. The client reads
+    those columns from the export CSV headers at runtime rather than from a
+    declared schema, so there is no public field list to record.
+cross_links:
+  conventions: conventions/callminer-conventions.yml
+  authentication: authentication/callminer-authentication.yml
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+  - url: https://raw.githubusercontent.com/Matatika/tap-callminer/main/tap_callminer/streams.py
+    http_status: 200
+    note: entity names, export data types and primary keys read verbatim
+  - url: https://raw.githubusercontent.com/Matatika/tap-callminer/main/tap_callminer/__init__.py
+    http_status: 200
+    note: region enum and export search modes
+  - url: https://api.callminer.net/bulkexport/swagger/v1/swagger.json
+    http_status: 302
+    note: CallMiner's own contract is login-gated; nothing to parse

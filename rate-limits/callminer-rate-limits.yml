@@ -1,0 +1,56 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  CallMiner public surface (callminer.com, api.callminer.net,
+  idp.callminer.net) plus the public open-source Bulk Export client
+notes: >-
+  CallMiner publishes no rate-limit documentation. There is no public developer
+  portal (developer.callminer.com and docs.callminer.com are NXDOMAIN), the
+  Swagger UIs on api.callminer.net 302 to an interactive login, and no
+  anonymously reachable CallMiner page states a quota, a window, or a
+  rate-limit response header. Nothing was observed on the wire either: every
+  anonymous request to the API host is redirected to the identity provider
+  before any RateLimit-* or Retry-After header could be emitted. limit_count: 0
+  is a measured absence, not an unchecked field.
+limit_count: 0
+limits: []
+response_headers:
+  observed: []
+  documented: []
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was observed on any
+    anonymous response from api.callminer.net or idp.callminer.net, and none is
+    documented publicly. An authenticated tenant would be required to observe
+    runtime signalling.
+exhaustion_status: unknown
+throttling_evidence:
+- source: https://github.com/Matatika/tap-callminer
+  kind: third-party-client
+  observation: >-
+    The maintained open-source Singer tap for the Bulk Export API mounts a
+    transport-level urllib3 Retry(total=3, backoff_factor=1) on idempotent
+    methods only, and leaves status-based retry to the Singer SDK's default
+    backoff. Its code comments attribute retries to long-lived idle connections
+    during multi-hour export downloads rather than to server-side throttling —
+    so there is no third-party evidence of a published or observed rate limit
+    either. Recorded as ecosystem context, not as a CallMiner statement.
+practical_limits:
+  note: >-
+    The Bulk Export API is job-based rather than request-rate-based: a client
+    POSTs an export job and polls job history at 60-second intervals until the
+    execution completes. The effective constraint is export job execution time
+    and concurrency, neither of which CallMiner documents publicly.
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+  - url: https://api.callminer.net/swagger/v1/swagger.json
+    http_status: 302
+    note: redirects to https://idp.callminer.net/connect/authorize — no headers to read
+  - url: https://api.callminer.net/bulkexport/swagger/v1/swagger.json
+    http_status: 302
+    note: redirects to https://idp.callminer.net/connect/authorize
+  - url: https://api.callminer.net/robots.txt
+    http_status: 200
+    note: 'User-agent: * / Disallow: /'
+  - url: https://callminer.com/llms.txt
+    http_status: 404

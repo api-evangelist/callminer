@@ -1,0 +1,52 @@
+generated: '2026-08-14'
+method: searched
+source: https://callminer.com/faq/how-does-callminer-pricing-work
+notes: >-
+  CallMiner publishes no pricing page and no priced tiers. https://callminer.com/pricing
+  does not serve a pricing page — it 302s to the Eureka product page. The only
+  first-party statement about pricing is the FAQ entry recorded below, which
+  describes the packaging model in prose and routes to a sales conversation. No
+  machine-readable pricing or catalog endpoint exists.
+plan_count: 0
+pricing_model: contact-sales
+public_pricing: false
+plans: []
+packaging:
+  statement: >-
+    "CallMiner offers multiple bundled pricing packages, based on either user
+    count or interaction volume."
+  statement_source: https://callminer.com/faq/how-does-callminer-pricing-work
+  units:
+  - user count
+  - interaction volume
+  cost_drivers:
+  - number of users
+  - volume of calls and/or messages processed
+  - analytics modules enabled
+  - integration needs
+  - deployment model (cloud or hybrid)
+  minimum_scale: >-
+    CallMiner states the platform scales from midsize teams (more than 60
+    agents) to global enterprises.
+api_pricing:
+  metered: unknown
+  note: >-
+    Neither the Ingestion API nor the Bulk Export API carries separate published
+    pricing. API access is a property of the Eureka subscription; client
+    credentials are issued by CallMiner rather than purchased self-service.
+free_tier: false
+trial:
+  self_serve: false
+  path: https://callminer.com/c/request-a-demo
+  note: Demo request form; no self-service signup or free trial exists.
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+  - url: https://callminer.com/faq/how-does-callminer-pricing-work
+    http_status: 200
+  - url: https://callminer.com/pricing
+    http_status: 200
+    note: 302 redirect to https://callminer.com/products/eureka — no pricing served
+  - url: https://callminer.com/request-a-demo
+    http_status: 200
+    note: 302 redirect to https://callminer.com/c/request-a-demo

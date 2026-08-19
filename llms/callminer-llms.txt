@@ -8,11 +8,34 @@
 - Client credentials (`client_id` / `client_secret`) are issued by CallMiner, not through self-service signup.
 - `developer.callminer.com` and `partner.callminer.com`, cited by third-party directories, do **not resolve** (NXDOMAIN, verified 2026-08-09).
 - `https://api.callminer.net/robots.txt` is `User-agent: * / Disallow: /`.
+- The Swagger document itself is at the .NET Swashbuckle default `/swagger/v1/swagger.json`, on both the ingestion mount and the `/bulkexport` mount (each with its own OIDC `client_id`). Both 302 to `https://idp.callminer.net/connect/authorize`. The contract exists and is named `v1`; it is **gated, not absent**.
+- No first-party SDK exists on npm, PyPI, NuGet, RubyGems, crates.io or Maven Central, and there is no `github.com/callminer` organization.
 
 ## APIs
 
 - [CallMiner Eureka Ingestion API](https://api.callminer.net/swagger): Asynchronously add or update media and metadata for audio and text-based contacts in a Eureka tenant. Base URL `https://api.callminer.net`. OAuth scope `https://callminer.net/auth/platform-ingestion`. Reference is login-gated.
 - [CallMiner Eureka Bulk Export API](https://api.callminer.net/bulkexport/swagger): Create and poll bulk export jobs that extract contact, transcript, score and metadata datasets. Base URL `https://api.callminer.net/bulkexport/api`. OAuth scope `https://callminer.net/auth/platform-bulkexport`. Reference is login-gated.
+
+## Bulk Export API surface
+
+Observed from a maintained third-party open-source client ([Matatika/tap-callminer](https://github.com/Matatika/tap-callminer)), not from CallMiner documentation. Base `https://api{region}.callminer.net/bulkexport/api`.
+
+- `POST /export/job` — create an export job. Body: `name`, `DataTypes[]`, `Duration{TimeFrame,StartDate,SearchMode}`, `EmailRecipients[]`. Search modes: `ClientCaptureDate`, `CreateDate`, `Updated`, `NewAndUpdated`.
+- `GET /export/history?id={jobId}` — poll executions (`Id`, `Status`, `CreateDate`, `FileSize`, `DownloadEndpoint`). Poll at 60s intervals.
+- `GET {DownloadEndpoint}` — download a ZIP of gzipped CSVs, one per data type, UTF-8 with BOM, datetimes `MM/dd/yyyy HH:mm:ss`.
+- `DELETE /export/job/{jobId}` and `DELETE /export/history/{jobExecutionId}` — housekeeping.
+- `GET /info/callmetadataconfig` — the tenant's contact metadata column configuration (`ColumnName`, `FriendlyName`, `Description`, `DotNetType`). The Contact shape is **tenant-configurable**, so there is no fixed field list.
+
+Export data types: `Contacts`, `Ai_summaries`, `Alerts`, `Categories`, `Category_components`, `Client_Ids`, `Coach_insights`, `Coach_workflow`, `Comments`, `Email_metadata`, `Events` (Delay / MissingRealTimeSegements / Overtalk / Redaction / Silence), `Scores`, `Score_indicators`, `Tags`, `Transcripts_by_speaker`. Every one is keyed by `ContactID`; `Contact` is the aggregate root.
+
+## Standards
+
+- [Open Voice Transcription Standard (OVTS)](https://callminer.com/products/open-voice-transcription-standard): CallMiner-authored interoperability framework letting a customer bring its own speech-to-text vendor. Members include AppTek, Deepgram, Google Cloud Speech-to-Text, Microsoft Azure Speech to Text, Nuance and SpeechMatics. CallMiner describes an OVTS API but publishes no OVTS schema or spec at any public URL.
+
+## Commercial
+
+- No published pricing. `callminer.com/pricing` 302s to the Eureka product page. CallMiner states it "offers multiple bundled pricing packages, based on either user count or interaction volume" ([FAQ](https://callminer.com/faq/how-does-callminer-pricing-work)). No free tier, no self-service signup — [request a demo](https://callminer.com/c/request-a-demo).
+- No published rate limits, and none observable anonymously.
 
 ## Authentication
 
@@ -51,5 +74,10 @@ CallMiner runs region-isolated API and identity hosts: US (`api.callminer.net` /
 - [Conformance](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/conformance/callminer-conformance.yml)
 - [Lifecycle](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/lifecycle/callminer-lifecycle.yml)
 - [Trust center](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/security/callminer-trust-center.yml)
+- [API conventions](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/conventions/callminer-conventions.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/data-model/callminer-data-model.yml)
+- [Packages](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/packages/callminer-packages.yml)
+- [Plans and pricing](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/plans/callminer-plans-pricing.yml)
+- [Rate limits](https://raw.githubusercontent.com/api-evangelist/callminer/refs/heads/main/rate-limits/callminer-rate-limits.yml)
 
-<!-- generated: 2026-08-09 | method: generated | source: apis.yml + repo artifacts -->
+<!-- generated: 2026-08-14 | method: generated | source: apis.yml + repo artifacts -->

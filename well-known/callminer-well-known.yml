@@ -20,6 +20,8 @@ hosts:
     content_type: application/jwk-set+json
   - path: /.well-known/oauth-authorization-server
     status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
   - path: /.well-known/security.txt
     status: 404
   - path: /.well-known/api-catalog
@@ -34,6 +36,10 @@ hosts:
   role: api
   documents:
   - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
     status: 404
   - path: /.well-known/security.txt
     status: 404
@@ -67,7 +73,18 @@ hosts:
     status: 404
   - path: /llms.txt
     status: 404
+reprobe:
+  fetched: '2026-08-14'
+  result: unchanged
+  note: >-
+    Re-probed on 2026-08-14. idp.callminer.net still serves the OIDC discovery
+    document and its JWKS (both 200); every other /.well-known/ path on
+    idp.callminer.net and api.callminer.net still returns 404. callminer.com
+    now answers every /.well-known/ path with a 302 to https://callminer.com/404,
+    which resolves to an HTTP 404 HTML page — a redirect to a 404, not a served
+    document. Both A2A agent-card paths were re-checked on every host and none
+    returned a document, so no AgentCard pointer is emitted.
 x-evidence:
-  fetched: '2026-08-09'
-  probes: 25
+  fetched: '2026-08-14'
+  probes: 29
   hits: 2

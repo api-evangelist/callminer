@@ -1,0 +1,210 @@
+generated: '2026-08-14'
+method: derived
+source: >-
+  https://idp.callminer.net/.well-known/openid-configuration (probed) +
+  observed OAuth redirects from https://api.callminer.net/swagger and
+  /bulkexport/swagger + https://github.com/Matatika/tap-callminer (third-party
+  open-source client)
+provenance_warning: >-
+  CallMiner publishes no public API reference: the Swagger UIs on the API host
+  302 to an interactive IdentityServer login and no developer portal resolves.
+  The request/response semantics below are therefore NOT quoted from CallMiner
+  documentation. They are derived from two sources that ARE public and real:
+  (1) CallMiner's own live identity provider and the authorization requests its
+  first-party Swagger UIs emit, probed directly; and (2) Matatika's maintained
+  open-source Singer tap for the CallMiner Eureka Bulk Export API, which calls
+  the real API and whose paths, payload keys and polling behaviour are read
+  verbatim from its source. Anything marked confidence: low or unknown was not
+  observable from either. Nothing here is invented.
+authentication:
+  style: oauth2
+  grant: client_credentials
+  token_endpoint: https://idp.callminer.net/connect/token
+  token_endpoint_auth:
+  - client_secret_basic
+  - client_secret_post
+  header: 'Authorization: Bearer <access_token>'
+  credential_issuance: >-
+    client_id / client_secret are issued by CallMiner support. There is no
+    self-service developer signup.
+  resource_scopes:
+  - https://callminer.net/auth/platform-ingestion
+  - https://callminer.net/auth/platform-bulkexport
+  token_refresh_note: >-
+    Access tokens are short-lived relative to a large export. The third-party
+    client re-applies its authenticator on every retry attempt specifically so
+    a retry can recover from a token that expired mid-export.
+  detail: authentication/callminer-authentication.yml
+  scopes: scopes/callminer-scopes.yml
+regional_addressing:
+  style: host-template
+  api_host: https://api{region}.callminer.net
+  idp_host: https://idp{region}.callminer.net
+  region_tokens:
+  - {region: US, token: '', api: https://api.callminer.net, idp: https://idp.callminer.net}
+  - {region: US-FISMA, token: f, api: https://apif.callminer.net, idp: https://idpf.callminer.net}
+  - {region: UK, token: uk, api: https://apiuk.callminer.net, idp: https://idpuk.callminer.net}
+  - {region: AU, token: aus, api: https://apiaus.callminer.net, idp: https://idpaus.callminer.net}
+  - {region: CA, token: ca, api: https://apica.callminer.net, idp: https://idpca.callminer.net}
+  - {region: EU, token: ew, api: https://apiew.callminer.net, idp: https://idpew.callminer.net}
+  note: >-
+    Tenants are region-isolated. A client must be pointed at both the API host
+    and the identity provider host for its own region; tokens are not portable
+    across regions.
+  confidence: high
+base_paths:
+  ingestion: https://api{region}.callminer.net
+  bulk_export: https://api{region}.callminer.net/bulkexport/api
+versioning:
+  scheme: none-observed
+  note: >-
+    No version segment or version header appears in any observed path. The
+    Swagger UIs are mounted at the .NET Swashbuckle default
+    /swagger/v1/swagger.json, which implies an internal document named "v1",
+    but that document is login-gated and no versioning policy is published.
+  confidence: low
+  detail: lifecycle/callminer-lifecycle.yml
+interaction_model:
+  style: asynchronous-job
+  description: >-
+    The Bulk Export API is job-oriented, not resource-oriented. A client creates
+    an export job, polls its execution history until the execution reports
+    Completed, downloads a single archive from a server-supplied endpoint, then
+    deletes both the job and the execution. There is no page-through record API.
+  operations:
+  - method: POST
+    path: /export/job
+    purpose: Create an export job; returns the job object with an Id.
+  - method: GET
+    path: /export/history?id={jobId}
+    purpose: >-
+      Poll the executions for a job. Each execution carries Id, Status,
+      CreateDate, FileSize and DownloadEndpoint.
+  - method: GET
+    path: '{DownloadEndpoint}'
+    purpose: >-
+      Download the completed export. Server-supplied absolute URL, not a
+      client-constructed path. Returns a ZIP archive containing one
+      gzipped CSV per requested data type.
+  - method: DELETE
+    path: /export/job/{jobId}
+    purpose: Delete the export job (client-side housekeeping).
+  - method: DELETE
+    path: /export/history/{jobExecutionId}
+    purpose: Delete the export execution and its stored archive.
+  - method: GET
+    path: /info/callmetadataconfig
+    purpose: >-
+      Return the tenant's contact metadata column configuration — the field
+      list, .NET type, friendly name and description for the Contacts data
+      type. This is the tenant-specific schema endpoint; the Contacts shape is
+      configurable per tenant rather than fixed.
+  polling:
+    interval_seconds: 60
+    note: >-
+      The third-party client polls at 60-second intervals and its source
+      comments attribute that cadence to CallMiner best practice.
+  confidence: high
+pagination:
+  style: none
+  note: >-
+    No pagination surface observed. Bulk Export returns a whole dataset as a
+    downloadable archive; volume is bounded by the job's Duration window rather
+    than by page size.
+idempotency:
+  supported: unknown
+  header: null
+  note: >-
+    No idempotency key, header or parameter is documented or observable. The
+    third-party client deliberately restricts transport-layer retries to
+    idempotent methods so the job-creating POST is never replayed — which is
+    evidence that replay safety is NOT provided by the API. No Idempotency
+    pointer is emitted for this provider.
+  confidence: medium
+request_tracing:
+  request_id_header: null
+  note: No correlation or request-id header observed or documented.
+error_envelope:
+  format: unknown
+  problem_json: false
+  note: >-
+    No error reference is published and no error body could be observed
+    anonymously — every unauthenticated request is redirected to the identity
+    provider before an application error can be produced. RFC 9457 conformance
+    is recorded as unknown in conformance/callminer-conformance.yml rather than
+    false.
+  detail: null
+retry_and_backoff:
+  documented: false
+  observed_client_behaviour: >-
+    Transport-level urllib3 Retry(total=3, backoff_factor=1) on idempotent
+    methods, plus the Singer SDK's status-based backoff. Attributed in the
+    client's own comments to long-lived idle sockets during multi-hour export
+    downloads rather than to server throttling.
+  rate_limits: rate-limits/callminer-rate-limits.yml
+data_encoding:
+  export_archive: application/zip
+  member_files: gzipped CSV, one per data type
+  member_filename_pattern: '{jobExecutionId}_{DataType}.csv.gz'
+  csv_encoding: utf-8-sig (BOM present)
+  datetime_format: MM/dd/yyyy HH:mm:ss
+  null_sentinel: >-
+    The literal string "null" appears in CSV cells for absent datetime values
+    and must be treated as null rather than as text.
+  type_system: >-
+    Column types are expressed as .NET type names (System.String, System.Int32,
+    System.Guid, System.DateTime, System.TimeSpan, System.Decimal, ...) in
+    /info/callmetadataconfig, not as JSON Schema types.
+  confidence: high
+job_request_shape:
+  note: >-
+    Payload keys observed verbatim from the third-party client's export job
+    request. PascalCase keys.
+  keys:
+    name: Job name (free text).
+    DataTypes: Array of data type names to include in the export.
+    Duration:
+      TimeFrame: e.g. "Custom"
+      StartDate: ISO start of the extraction window
+      SearchMode: one of ClientCaptureDate, CreateDate, Updated, NewAndUpdated
+    EmailRecipients: >-
+      Array of email addresses. CallMiner requires at least one recipient to
+      notify on export completion — a notification email is a required part of
+      the job contract, not an optional convenience.
+  job_execution_fields:
+  - Id
+  - Status
+  - CreateDate
+  - FileSize
+  - DownloadEndpoint
+  observed_status_values:
+  - Completed
+  confidence: high
+cross_links:
+  authentication: authentication/callminer-authentication.yml
+  scopes: scopes/callminer-scopes.yml
+  lifecycle: lifecycle/callminer-lifecycle.yml
+  rate_limits: rate-limits/callminer-rate-limits.yml
+  data_model: data-model/callminer-data-model.yml
+  conformance: conformance/callminer-conformance.yml
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+  - url: https://idp.callminer.net/.well-known/openid-configuration
+    http_status: 200
+  - url: https://api.callminer.net/swagger/v1/swagger.json
+    http_status: 302
+    note: >-
+      302 to /connect/authorize with scope
+      "openid profile offline_access https://callminer.net/auth/platform-ingestion"
+  - url: https://api.callminer.net/bulkexport/swagger/v1/swagger.json
+    http_status: 302
+    note: >-
+      302 to /connect/authorize with scope
+      "openid profile offline_access https://callminer.net/auth/platform-bulkexport"
+  - url: https://raw.githubusercontent.com/Matatika/tap-callminer/main/tap_callminer/client.py
+    http_status: 200
+    note: third-party open-source client; url_base and auth flow read verbatim
+  - url: https://raw.githubusercontent.com/Matatika/tap-callminer/main/tap_callminer/streams.py
+    http_status: 200
+    note: third-party open-source client; export job paths and payload read verbatim

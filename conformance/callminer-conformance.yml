@@ -1,4 +1,4 @@
-generated: '2026-08-09'
+generated: '2026-08-14'
 method: probed
 source: https://idp.callminer.net/.well-known/openid-configuration
 notes: >-
@@ -54,7 +54,27 @@ standards:
   evidence: >-
     Swagger UI is served at https://api.callminer.net/swagger and
     /bulkexport/swagger but both 302 to an interactive login; no OpenAPI or
-    swagger.json is retrievable anonymously.
+    swagger.json is retrievable anonymously. Re-probed 2026-08-14 against the
+    .NET Swashbuckle default document path: /swagger/v1/swagger.json and
+    /swagger/docs/v1 also 302 to /connect/authorize on both the ingestion and
+    bulkexport mounts (distinct client_ids per mount), while /swagger.json,
+    /openapi.json, /openapi.yaml, /v1/swagger.json and /api-docs all 404. The
+    document exists and is named v1; it is gated, not absent.
+- id: ovts-open-voice-transcription-standard
+  conforms: true
+  role: author
+  evidence: >-
+    CallMiner authored and publishes the Open Voice Transcription Standard
+    (OVTS), a programming framework that lets a customer bring its own
+    speech-to-text vendor to the Eureka platform. Founding members named in the
+    launch announcement are Nuance, Deepgram, Allo-Media and AppTek; the current
+    OVTS integration listings name AppTek, Deepgram, Google Cloud
+    Speech-to-Text, Microsoft Azure Speech to Text, Nuance and SpeechMatics.
+    CallMiner describes an OVTS API but publishes no OVTS schema, spec document
+    or reference implementation at any anonymously reachable URL, so the
+    standard is asserted and marketed but not machine-readable.
+  spec_published: false
+  url: https://callminer.com/products/open-voice-transcription-standard
 - id: rfc9457-problem-details
   conforms: unknown
   evidence: no public specification or error reference to evaluate
@@ -79,13 +99,21 @@ compliance:
     compliance through an independent third-party audit conducted by
     KirkpatrickPrice." — https://callminer.com/our-company-security
 x-evidence:
-  fetched: '2026-08-09'
+  fetched: '2026-08-14'
   evidence:
   - url: https://idp.callminer.net/.well-known/openid-configuration
     http_status: 200
   - url: https://idp.callminer.net/.well-known/oauth-authorization-server
     http_status: 404
+  - url: https://idp.callminer.net/.well-known/oauth-protected-resource
+    http_status: 404
   - url: https://callminer.com/our-company-security
     http_status: 200
-  - url: https://api.callminer.net/swagger
+  - url: https://api.callminer.net/swagger/v1/swagger.json
     http_status: 302
+  - url: https://api.callminer.net/bulkexport/swagger/v1/swagger.json
+    http_status: 302
+  - url: https://api.callminer.net/openapi.json
+    http_status: 404
+  - url: https://callminer.com/products/open-voice-transcription-standard
+    http_status: 200
