@@ -2,10 +2,24 @@
   "repo": "callminer",
   "feeds": [
     {
+      "source": "https://callminer.com/feed/",
+      "feed_url": "https://callminer.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://callminer.com/blog/feed/",
+      "feed_url": "https://callminer.com/blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://callminer.com/",
       "feed_url": "https://callminer.com/feed/",
       "title": "",
-      "saved": 1,
+      "saved": 0,
       "method": "discovered"
     },
     {
@@ -16,6 +30,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 1,
-  "fetched": "2026-08-15T12:22:01Z"
+  "post_count": 18,
+  "fetched": "2026-08-22T20:20:02Z"
 }
