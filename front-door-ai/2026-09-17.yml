@@ -1,0 +1,31 @@
+# Front Door AI Index — callminer — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: callminer
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: callminer.com
+  final_host: callminer.com
+  ownership: own
+  owner: callminer
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 36
+  host_score: 36
+  density: 26.35
+  words: 1366
+  tiers:
+    agentic: 4
+    core: 30
+    model: 2
+  ambiguous: 38
+  top_terms:
+    AI: 30
+    automation: 13
+    intelligence: 13
+    agent: 12
+    AI agent: 4
+    Azure OpenAI: 1
+    OpenAI: 1
