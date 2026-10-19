@@ -1,9 +1,11 @@
 generated: '2026-10-13'
 method: searched
 checked:
+- genesys/integrations/genesys-integration-edges.yml
 - https://aws.amazon.com/marketplace/
 - https://azuremarketplace.microsoft.com/
 - https://github.com/meltano/hub
+- talkdesk/integrations/talkdesk-integration-edges.yml
 - zoom/integrations/zoom-integration-edges.yml
 marketplace_apps: []
 edges:
@@ -85,5 +87,46 @@ edges:
   detected: '2026-10-18'
   detected_by: mirror-platform-listings.py
   category: Zoom app
+- partner_name: Genesys (own)
+  partner: genesys
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appfoundry.genesys.com/filter/genesyscloud/listing/6e80dcad-4ca7-4936-ab06-42f39ed103cd
+  mirror_of: genesys/integrations/genesys-integration-edges.yml
+  apps:
+  - 'CallMiner '
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
+  category: customerEngagement
+  publisher_verified:
+  - attestation:ccp
+  - attestation:gdpr
+  - attestation:hipaa
+  - attestation:hitrust
+  - attestation:iso
+  - attestation:pci
+  - attestation:soc2
+- partner_name: Talkdesk (own)
+  partner: talkdesk
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appconnect.talkdesk.com/apps/callminer-conversation-intelligence
+  mirror_of: talkdesk/integrations/talkdesk-integration-edges.yml
+  apps:
+  - CallMiner Conversation Intelligence
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
 source:
 - https://github.com/meltano/hub

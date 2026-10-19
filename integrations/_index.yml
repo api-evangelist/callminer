@@ -69,3 +69,28 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: callminer-genesys-own
+  label: Genesys (own)
+  partner: genesys
+  partner_name: Genesys (own)
+  category: customerEngagement
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appfoundry.genesys.com/filter/genesyscloud/listing/6e80dcad-4ca7-4936-ab06-42f39ed103cd
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: callminer-talkdesk-own
+  label: Talkdesk (own)
+  partner: talkdesk
+  partner_name: Talkdesk (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appconnect.talkdesk.com/apps/callminer-conversation-intelligence
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
