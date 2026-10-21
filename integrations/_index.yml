@@ -27,35 +27,6 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
-- slug: callminer-meltano
-  label: Meltano
-  partner: meltano
-  partner_name: Meltano
-  type: marketplace
-  marketplace: meltano-hub
-  channel: elt-connector
-  evidence: https://hub.meltano.com/extractors/tap-callminer--matatika
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Meltano Hub (github.com/meltano/hub _data/meltano extractors + loaders)
-    spec_file: null
-    role: elt-connector:meltano-hub
-    registered_name: CallMiner
-    matched_domain: callminer.com
-    matched_by: domain
-    detected_by: sweep-data-integration.py
-    detected: '2026-10-18'
-    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
-    plugins:
-    - tap-callminer--matatika
-    maintenance_status:
-    - active
-    quality:
-    - gold
-    builder: 'community (Meltano Hub variant maintainers: matatika)'
-  status: not-a-workflow
-  arazzo: null
 - slug: callminer-zoom-own
   label: Zoom (own)
   partner: zoom
@@ -92,5 +63,68 @@
   evidence: https://appconnect.talkdesk.com/apps/callminer-conversation-intelligence
   source: edge
   relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: callminer-meltano
+  label: Meltano
+  partner: meltano
+  partner_name: Meltano
+  type: marketplace
+  marketplace: meltano-hub
+  channel: elt-connector
+  evidence: https://hub.meltano.com/extractors/tap-callminer--matatika
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Meltano Hub (github.com/meltano/hub _data/meltano extractors + loaders)
+    spec_file: null
+    role: elt-connector:meltano-hub
+    registered_name: CallMiner
+    matched_domain: callminer.com
+    matched_by: domain
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    plugins:
+    - tap-callminer--matatika
+    maintenance_status:
+    - active
+    quality:
+    - gold
+    builder: 'community (Meltano Hub variant maintainers: matatika)'
+  status: not-a-workflow
+  arazzo: null
+- slug: callminer-zoom-partner-program
+  label: Zoom Partner Program
+  partner: zoom
+  partner_name: Zoom Partner Program
+  category: Zoom technology partner
+  type: register
+  channel: standard-directory
+  evidence: https://partner.zoom.com/solutions/callminer/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Zoom Partner Solutions (partner.zoom.com/solutions; /wp-json/wp/v2/isvsolution)
+    standard: Zoom Partner Program
+    spec_file: null
+    role: zoom-technology-partner
+    registered_name: CallMiner
+    register_id: https://partner.zoom.com/solutions/callminer/
+    matched_domain: null
+    matched_by: register-name
+    identity_source: register-name
+    signal_note: 'participation only: partner type / program tier is partner_tier, never counted; no Zoom certification
+      is printed on the register, so no certified_products'
+    detected_by: sweep-zoom-app-marketplace.py
+    detected: '2026-10-21'
+    context:
+      products:
+      - App Marketplace
+      - Contact Center
+      - Meetings
+      - Phone
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
   status: not-a-workflow
   arazzo: null
