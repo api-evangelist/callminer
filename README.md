@@ -64,21 +64,110 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-CallMiner is a conversation intelligence and contact-center analytics company. Its Eureka platform
-captures and analyzes omnichannel customer interactions — recorded and real-time audio, screen
-recordings, chat, email, surveys and video — across Capture (Record, Screen Record, Redact),
-Intelligence (Analyze, Visualize), Augmentation (Coach, RealTime) and Automation (Outreach,
-OmniAgent, LiveTranslate).
+CallMiner is a Waltham, Massachusetts conversation intelligence and contact-center analytics company whose Eureka platform captures and analyzes omnichannel customer interactions — recorded and real-time audio, screen recordings, chat, email, surveys and video — to surface customer experience, quality management, risk and compliance, fraud and sales-effectiveness insight. The product family spans Capture (Record, Screen Record, Redact), Intelligence (Analyze, Visualize), Augmentation (Coach, RealTime) and Automation (Outreach, OmniAgent, LiveTranslate). CallMiner exposes an OAuth 2.0 protected developer API — a media/metadata Ingestion API and a Bulk Export API — hosted on regional api*.callminer.net endpoints and secured by its own IdentityServer-based identity provider at idp*.callminer.net. The API reference is published as Swagger UI on the API host itself but sits behind an interactive login, so no machine-readable contract is publicly retrievable.
 
-CallMiner ships a real developer API — an Ingestion API and a Bulk Export API on region-isolated
-`api*.callminer.net` hosts, protected by OAuth 2.0 against its own identity provider at
-`idp*.callminer.net`, and tracked as a "Developer API" component on its public status page. The
-API reference is served as Swagger UI from the API host, but both `/swagger` and
-`/bulkexport/swagger` redirect to an interactive CallMiner login, so no OpenAPI document is
-publicly retrievable. The `developer.callminer.com` and `partner.callminer.com` hosts cited by
-third-party directories do not resolve (NXDOMAIN, verified 2026-08-09).
+**Areas:** Company · Conversation Intelligence · Speech Analytics · Contact Center · Customer Experience · Artificial Intelligence · Analytics · Transcription · Quality Management · Compliance
 
-- Website: https://callminer.com/
-- Status: https://status.callminer.net/
-- Security and compliance: https://callminer.com/our-company-security
-- OpenID Connect discovery: https://idp.callminer.net/.well-known/openid-configuration
+## CallMiner on APIs.io
+
+Everything profiled for CallMiner is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/callminer/](https://apis.io/providers/callminer/)** — or go straight to one of the APIs or properties below.
+
+### APIs (2)
+
+- [CallMiner Eureka Ingestion API](https://apis.io/apis/callminer/callminer-eureka-ingestion-api/) — Asynchronously add or update media and metadata for audio and text-based contacts in a CallMiner Eureka tenant. Hosted on the regional CallMiner API host…
+- [CallMiner Eureka Bulk Export API](https://apis.io/apis/callminer/callminer-eureka-bulk-export-api/) — Create and poll bulk export jobs that extract contact, transcript, score and metadata datasets out of a CallMiner Eureka tenant as downloadable archives.…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Callminer Authentication](https://apis.io/security/callminer/callminer-authentication/)
+- [Callminer Domain Security](https://apis.io/security/callminer/callminer-domain-security/)
+- [Callminer Trust Center](https://apis.io/security/callminer/callminer-trust-center/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Callminer Scopes](https://apis.io/scopes/callminer/callminer-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Callminer Plans Pricing](https://apis.io/plans/callminer/callminer-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Callminer Rate Limits](https://apis.io/rate-limits/callminer/callminer-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://callminer.com/)
+- [Support](https://callminer.com/contact)
+- [Blog](https://callminer.com/blog)
+- [Compliance](https://callminer.com/our-company-security)
+- [Terms of service](https://callminer.com/terms-use)
+- [Privacy policy](https://callminer.com/privacy-policy)
+- [Status](https://status.callminer.net/)
+
+## API Evangelist rating
+
+**Kin Score 25.9** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 15.8 |
+| Developer ergonomics | 19.0 |
+| Access clarity | 36.8 |
+
+**Agent readiness 13.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 36.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/callminer/](https://apis.io/providers/callminer/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for CallMiner: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/callminer/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
